@@ -527,3 +527,27 @@ export interface AllSurveillanceData {
     wildlife: Record<string, WildlifeStateData>;
     disaster: Record<string, DisasterStateData>;
 }
+
+export interface BaseAlert {
+  id?: number | string;
+  title: string;
+  location: string;
+  timestamp?: string;
+  severity: string;   // "Critical" | "High" | "Moderate" | etc.
+  date?: string;      // ISO date used everywhere
+  district?: string;  // For state/district alerts
+}
+
+export type EscalationLevel = "National" | "State" | "District";
+export type EscalationStatus = "escalated" | "monitoring";
+
+export interface BaseAlert {
+  id?: number | string;
+  title: string;
+  location: string;
+  timestamp?: string;
+  severity: string;   // "Critical" | "High" | "Moderate", etc.
+  date?: string;      // ISO date
+  district?: string;  // Used in State/District dashboards
+}
+

@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const dataRoutes = require('./routes/dataRoutes');
+const escalationRoutes = require("./routes/escalationRoutes");
 
 // Express app
 const app = express();
@@ -15,6 +16,7 @@ app.use(express.json());
 
 // API Routes
 app.use('/api', dataRoutes);
+app.use("/api/escalation", escalationRoutes);
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI)
