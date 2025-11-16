@@ -148,7 +148,7 @@ const oneHealthIndexDataIndia = {
 };
 
 const nationalDataIndia = {
-    country: 'India',
+    country: 'INDIA',
     kpiData: [
         { title: 'New Dengue Cases (24h)', value: '8,124', change: '+8.1% vs yesterday', changeType: 'increase',
             details: { type: 'trend_prediction', summary: 'Recent case data indicates a surge in DENV-2 serotype. However, genomic sequencing confirms the current strain is associated with milder symptoms, and mutations linked to Dengue Hemorrhagic Fever are absent.', data: [ { name: 'Day -6', value: 7500 }, { name: 'Day -5', value: 7650 }, { name: 'Day -4', value: 7800 }, { name: 'Day -3', value: 7950 }, { name: 'Day -2', value: 8000 }, { name: 'Day -1', value: 8050 }, { name: 'Today', value: 8124 }, ], prediction: { name: 'Tomorrow', value: 8200 }, }

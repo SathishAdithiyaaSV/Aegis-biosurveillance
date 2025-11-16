@@ -6,6 +6,7 @@ const NationalData = require('./models/NationalData');
 const State = require('./models/State');
 const Surveillance = require('./models/Surveillance');
 const ThreatSignals = require('./models/ThreatSignals');
+const Readiness = require('./models/Readiness');
 
 const seedDatabase = async () => {
     try {
@@ -34,6 +35,52 @@ const seedDatabase = async () => {
         // Seed Threat Signal data
         await ThreatSignals.create(threatSignalData);
         console.log('Threat Signals seeded!');
+
+        await Readiness.deleteMany({});
+
+        await Readiness.insertMany([
+        // NATIONAL
+        {
+            level: 'National',
+            location: 'India',
+            organization: 'NDRF',
+            status: 'Standby',
+            personnel: '2 battalions on alert',
+            equipment: 'Hazmat units, mobile hospitals',
+            updateTime: '15 mins ago'
+        },
+        {
+            level: 'National',
+            location: 'India',
+            organization: 'ICMR',
+            status: 'Mobilizing',
+            personnel: 'Epidemiology teams assembling',
+            equipment: 'Mobile BSL-3 labs preparing',
+            updateTime: '5 mins ago'
+        },
+
+        // STATE
+        {
+            level: 'State',
+            location: 'Kerala',
+            organization: 'Kerala Public Health Department',
+            status: 'Mobilizing',
+            personnel: 'RRT teams deployed',
+            equipment: 'Emergency supplies dispatched',
+            updateTime: '8 mins ago'
+        },
+
+        // DISTRICT
+        {
+            level: 'District',
+            location: 'Ernakulam',
+            organization: 'District Medical Office',
+            status: 'Engaged',
+            personnel: 'Field teams conducting tracing',
+            equipment: 'PHCs on 24/7 alert',
+            updateTime: '2 mins ago'
+        }
+        ]);
 
         console.log('All seeding complete!');
         mongoose.connection.close();

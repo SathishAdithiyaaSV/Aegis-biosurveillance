@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldCheckIcon, CheckCircleIcon, UserGroupIcon, CubeIcon, InformationCircleIcon } from '@heroicons/react/24/solid';
 import { EscalatedAlert, ReadinessStatus } from '../types';
-import { getReadinessData } from '../data/readinessData';
 
 interface MonitoringPanelProps {
   currentLevel: 'District' | 'State' | 'National';
   activeAlert: EscalatedAlert;
   onResolve: () => void;
 }
+
+const fetchReadinessData = async (
+  level: 'National' | 'State' | 'District',
+  location: string
+) => {
+  const res = await fetch(`http://localhost:5000/api/readiness/${level}/${location}`);
+  if (!res.ok) throw new Error(`Readiness fetch failed: ${res.statusText}`);
+  return res.json();
+};
 
 const ReadinessCard: React.FC<{ item: ReadinessStatus }> = ({ item }) => {
     const getStatusPill = (status: ReadinessStatus['status']) => {
@@ -47,16 +55,30 @@ const ReadinessCard: React.FC<{ item: ReadinessStatus }> = ({ item }) => {
 
 const MonitoringPanel: React.FC<MonitoringPanelProps> = ({ currentLevel, activeAlert, onResolve }) => {
   const [readiness, setReadiness] = useState<ReadinessStatus[]>([]);
-  
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    let locationKey = '';
-    if (currentLevel === 'State') {
-        locationKey = activeAlert.from.split(' ')[0];
-    } else if (currentLevel === 'District') {
-        locationKey = activeAlert.from;
-    }
-    const data = getReadinessData(currentLevel, locationKey);
-    setReadiness(data);
+    const load = async () => {
+      try {
+        setLoading(true);
+
+        // Resolve location to match backend
+        let location = '';
+        if (currentLevel === 'National') location = 'India';
+        else if (currentLevel === 'State') location = activeAlert.from.split(' ')[0];
+        else location = activeAlert.from;
+
+        const data = await fetchReadinessData(currentLevel, location);
+        setReadiness(data);
+
+      } catch (err) {
+        console.error("Readiness fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
   }, [currentLevel, activeAlert]);
 
   return (
@@ -80,9 +102,13 @@ const MonitoringPanel: React.FC<MonitoringPanelProps> = ({ currentLevel, activeA
         <p className="text-xs text-gray-300">{activeAlert.alert.location}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        {readiness.map(item => <ReadinessCard key={item.organization} item={item} />)}
-      </div>
+      {loading ? (
+        <p className="text-gray-400 text-sm">Loading readiness data...</p>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+          {readiness.map(item => <ReadinessCard key={item.organization} item={item} />)}
+        </div>
+      )}
     </div>
   );
 };
