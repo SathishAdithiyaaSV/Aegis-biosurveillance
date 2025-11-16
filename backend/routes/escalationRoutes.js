@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Escalation = require("../models/Escalation");
+const { sendSMS, makeCall } = require('../services/twilioService');
 
 // GET active escalation
 router.get("/active", async (req, res) => {
@@ -13,11 +14,32 @@ router.get("/active", async (req, res) => {
 });
 
 // CREATE escalation
-router.post("/escalate", async (req, res) => {
+router.post('/escalate', async (req, res) => {
   try {
-    const newEsc = await Escalation.create(req.body);
-    res.json(newEsc);
+    const { level, from, alert } = req.body;
+
+    const doc = await Escalation.create({
+      level,
+      from,
+      alert,
+      status: 'escalated'
+    });
+
+    const alertSummary = `🚨 Emergency Alert (${level})
+Source: ${from}
+Event: ${alert.title}
+Location: ${alert.location}
+Severity: ${alert.severity}`;
+
+    // Send SMS
+    sendSMS(process.env.ALERT_PHONE_NUMBER, alertSummary);
+
+    // Make Call (optional)
+    makeCall(process.env.ALERT_PHONE_NUMBER, `${alert.title} at ${alert.location}. Severity: ${alert.severity}. Immediate action required.`);
+
+    return res.json({ success: true, escalation: doc });
   } catch (err) {
+    console.error('Escalation Error:', err);
     res.status(500).json({ error: err.message });
   }
 });

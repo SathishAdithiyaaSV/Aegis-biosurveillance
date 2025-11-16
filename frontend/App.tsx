@@ -65,14 +65,23 @@ function App() {
   // Escalation: CREATE
   // -----------------------------------------
   const handleEscalate = async (newAlert: EscalatedAlert) => {
-    try {
-      const saved = await escalateAlert(newAlert);
-      setActiveAlert(saved);
-      console.log("Escalated:", saved);
-    } catch (err) {
-      console.error("Escalation failed:", err);
-    }
-  };
+  try {
+    const res = await fetch("http://localhost:5000/api/escalation/escalate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newAlert),
+    });
+
+    if (!res.ok) throw new Error("Escalation failed");
+
+    console.log("Alert escalated & emergency communication triggered!");
+
+    setActiveAlert(newAlert);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   // -----------------------------------------
   // Escalation: ACKNOWLEDGE → monitoring
