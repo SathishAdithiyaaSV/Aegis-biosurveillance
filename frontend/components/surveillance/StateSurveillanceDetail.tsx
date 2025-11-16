@@ -25,7 +25,7 @@ const StateSurveillanceDetail: React.FC<StateSurveillanceDetailProps> = ({ type,
             setError(null);
             setDetailData(null);
             try {
-                const response = await fetch(`http://localhost:5000/api/surveillance/detail/${type}/${stateId}`);
+                const response = await fetch(`https://aegis-biosurveillance.onrender.com/api/surveillance/detail/${type}/${stateId}`);
                 if (!response.ok) {
                     if (response.status === 404) {
                         throw new Error(`No detailed ${type} surveillance data available for ${stateName}.`);

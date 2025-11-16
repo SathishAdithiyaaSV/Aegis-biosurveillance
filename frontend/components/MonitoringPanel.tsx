@@ -12,7 +12,7 @@ const fetchReadinessData = async (
   level: 'National' | 'State' | 'District',
   location: string
 ) => {
-  const res = await fetch(`http://localhost:5000/api/readiness/${level}/${location}`);
+  const res = await fetch(`https://aegis-biosurveillance.onrender.com/api/readiness/${level}/${location}`);
   if (!res.ok) throw new Error(`Readiness fetch failed: ${res.statusText}`);
   return res.json();
 };

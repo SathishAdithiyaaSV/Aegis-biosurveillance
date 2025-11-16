@@ -80,8 +80,8 @@ const DashboardIndia: React.FC<DashboardIndiaProps> = ({ activeAlert, onEscalate
       setError(null);
       try {
         const [nationalRes, surveillanceRes] = await Promise.all([
-          fetch('http://localhost:5000/api/national/INDIA'),
-          fetch('http://localhost:5000/api/surveillance/all')
+          fetch('https://aegis-biosurveillance.onrender.com/api/national/INDIA'),
+          fetch('https://aegis-biosurveillance.onrender.com/api/surveillance/all')
         ]);
 
         if (!nationalRes.ok) throw new Error(`Failed to fetch national data: ${nationalRes.statusText}`);

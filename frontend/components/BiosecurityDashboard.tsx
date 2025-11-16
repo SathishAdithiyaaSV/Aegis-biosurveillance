@@ -24,7 +24,7 @@ const BiosecurityDashboard: React.FC<BiosecurityDashboardProps> = ({ country, on
   const [biologicalDetail, setBiologicalDetail] = useState<BiologicalWeaponSignal | null>(null);
   const [chemicalDetail, setChemicalDetail] = useState<ChemicalWeaponSignal | null>(null);
 
-  const API_BASE = "http://localhost:5000/api";
+  const API_BASE = "https://aegis-biosurveillance.onrender.com/api";
 
   useEffect(() => {
     const fetchData = async () => {

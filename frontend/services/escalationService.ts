@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api/escalation";
+const API = "https://aegis-biosurveillance.onrender.com/api/escalation";
 
 export async function getActiveEscalation() {
   const res = await fetch(`${API}/active`);

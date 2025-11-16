@@ -34,7 +34,7 @@ const SurveillanceMapView: React.FC<SurveillanceMapViewProps> = ({ type, onBack 
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch(`http://localhost:5000/api/surveillance/map/${type}`);
+            const response = await fetch(`https://aegis-biosurveillance.onrender.com/api/surveillance/map/${type}`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch map data: ${response.statusText}`);
             }

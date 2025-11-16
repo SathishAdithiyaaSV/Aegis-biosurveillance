@@ -37,7 +37,7 @@ const StateDashboard: React.FC<StateDashboardProps> = ({ stateId, onBack, active
       setIsLoading(true);
       setError(null);
       try {
-        const response = await fetch(`http://localhost:5000/api/states/detail/${stateId}`);
+        const response = await fetch(`https://aegis-biosurveillance.onrender.com/api/states/detail/${stateId}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch state data: ${response.statusText}`);
         }

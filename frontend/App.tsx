@@ -5,7 +5,7 @@ import DashboardIndia from './components/DashboardIndia';
 import { EscalatedAlert } from './types';
 
 // Backend API service functions
-const API_BASE = "http://localhost:5000/api/escalation";
+const API_BASE = "https://aegis-biosurveillance.onrender.com/api/escalation";
 
 async function getActiveEscalation() {
   const res = await fetch(`${API_BASE}/active`);
@@ -66,7 +66,7 @@ function App() {
   // -----------------------------------------
   const handleEscalate = async (newAlert: EscalatedAlert) => {
   try {
-    const res = await fetch("http://localhost:5000/api/escalation/escalate", {
+    const res = await fetch("https://aegis-biosurveillance.onrender.com/api/escalation/escalate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newAlert),
