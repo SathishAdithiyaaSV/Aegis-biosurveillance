@@ -53,51 +53,50 @@ router.get('/states/detail/:stateId', async (req, res) => {
 
 
 // GET Surveillance Map Data for a specific type
-router.get('/surveillance/map/:type', (req, res) => {
-    try {
-        const type = req.params.type.toLowerCase();
-        // const data = surveillanceMapData[type];
-        const data = null;
-        if (!data) {
-            return res.status(404).json({ error: 'Data not found for the specified surveillance type' });
-        }
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+// router.get('/surveillance/map/:type', (req, res) => {
+//     try {
+//         const type = req.params.type.toLowerCase();
+//         const data = surveillanceMapData[type];
+//         if (!data) {
+//             return res.status(404).json({ error: 'Data not found for the specified surveillance type' });
+//         }
+//         res.status(200).json(data);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
 
-// GET Surveillance Detail Data for a specific state and type
-router.get('/surveillance/detail/:type/:stateId', async (req, res) => {
-    try {
-        const type = req.params.type.toLowerCase();
-        const stateId = req.params.stateId.toUpperCase();
+// // GET Surveillance Detail Data for a specific state and type
+// router.get('/surveillance/detail/:type/:stateId', async (req, res) => {
+//     try {
+//         const type = req.params.type.toLowerCase();
+//         const stateId = req.params.stateId.toUpperCase();
 
-        const surveillanceDoc = await Surveillance.findOne({});
-        if (!surveillanceDoc || !surveillanceDoc[type] || !surveillanceDoc[type].get(stateId)) {
-            return res.status(404).json({ error: 'Surveillance data not found for the specified type and state' });
-        }
+//         const surveillanceDoc = await Surveillance.findOne({});
+//         if (!surveillanceDoc || !surveillanceDoc[type] || !surveillanceDoc[type].get(stateId)) {
+//             return res.status(404).json({ error: 'Surveillance data not found for the specified type and state' });
+//         }
 
-        const data = surveillanceDoc[type].get(stateId);
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+//         const data = surveillanceDoc[type].get(stateId);
+//         res.status(200).json(data);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
-// GET all surveillance data
-router.get('/surveillance/all', async (req, res) => {
-    try {
-        const data = await Surveillance.findOne({});
-        if (!data) {
-            return res.status(404).json({ error: 'Surveillance data not found' });
-        }
-        res.status(200).json(data);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
+// // GET all surveillance data
+// router.get('/surveillance/all', async (req, res) => {
+//     try {
+//         const data = await Surveillance.findOne({});
+//         if (!data) {
+//             return res.status(404).json({ error: 'Surveillance data not found' });
+//         }
+//         res.status(200).json(data);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// });
 
 
 module.exports = router;
