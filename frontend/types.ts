@@ -551,3 +551,14 @@ export interface BaseAlert {
   district?: string;  // Used in State/District dashboards
 }
 
+export interface OdinSignal {
+  id: string;
+  threatLevel: 'Critical' | 'High' | 'Moderate';
+  source: 'Dark Web Intel' | 'Anomalous DNA Synthesis Order' | 'Preprint Server Anomaly';
+  timestamp: string;
+  title: string;
+  context: string; // The data/context to be sent to Gemini
+  location?: string; // Location of the threat, if applicable
+  agent?: string; // The specific agent, if known
+  canSimulatePlume?: boolean; // Flag to enable plume modeling
+}

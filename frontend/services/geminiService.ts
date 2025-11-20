@@ -1,5 +1,7 @@
+
 import { GoogleGenAI, Type, GenerateContentResponse } from "@google/genai";
-import { Threat, ZoonoticAlert, EnvironmentalAlert, WildlifeAlert, DisasterAlert, VaccineInventoryItem, Intervention, SimulationResult, TimeSeriesData, PredictiveDataPoint, GenomicSignal, BioThreat, LabStatus, BiologicalWeaponSignal, ChemicalWeaponSignal, LivestockAlert, NationalBiosecurityIndexData, SlaughterhouseData } from "../types";
+// FIX: Added missing import for PlumeSimulationResult type.
+import { Threat, ZoonoticAlert, EnvironmentalAlert, WildlifeAlert, DisasterAlert, VaccineInventoryItem, Intervention, SimulationResult, TimeSeriesData, PredictiveDataPoint, GenomicSignal, BioThreat, LabStatus, BiologicalWeaponSignal, LivestockAlert, NationalBiosecurityIndexData, SlaughterhouseData, ChemicalWeaponSignal, PestInfestationAlert, CropDiseaseAlert, OdinSignal, GenomicAttributionResult, PlumeSimulationResult, SupplyChainAnalysis } from "../types";
 
 const getAiClient = () => new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
@@ -70,7 +72,7 @@ ${dataSummary}`;
     const response = await withRetry<GenerateContentResponse>(() => {
         const ai = getAiClient();
         return ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-pro',
             contents: prompt,
         });
     });
@@ -96,7 +98,7 @@ export const getThreatsAnalysis = async (threats: Threat[]): Promise<Record<stri
         const prompt = `
 You are Aegis, a biosurveillance AI. Analyze the following list of infectious disease threats.
 For each threat, provide a single, concise sentence summary as requested.
-Return the output as a single valid JSON object where each key is the exact threat name and the value is the generated summary. Ensure the JSON is well-formed and all strings are properly escaped.
+Return the output as a single valid JSON object where each key is the exact threat name and the value is the generated summary.
 
 Threats to analyze:
 ${threatsPrompts}
@@ -157,7 +159,7 @@ ${indexSummary}`;
     const response = await withRetry<GenerateContentResponse>(() => {
       const ai = getAiClient();
       return ai.models.generateContent({
-        model: 'gemini-2.5-flash', // Using a more powerful model for strategic advice
+        model: 'gemini-2.5-pro', // Using a more powerful model for strategic advice
         contents: prompt,
       });
     });
@@ -190,7 +192,7 @@ ${stateDataSummary}
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -220,7 +222,7 @@ Output the analysis in Markdown format with this exact structure:
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -252,7 +254,7 @@ ${inventorySummary}
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -286,7 +288,7 @@ ${summary}
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -315,7 +317,7 @@ For a confirmed **${alert.name}** alert in **${alert.location}**, generate a 3-t
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -344,7 +346,7 @@ For a confirmed high signal of **${alert.name}** in the wastewater system at **$
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -373,7 +375,7 @@ For a detected wildlife disease event: **${alert.disease}** in **${alert.species
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -402,7 +404,7 @@ For a **'${alert.severity}'** **${alert.disasterType}** event in **${alert.locat
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -424,7 +426,7 @@ export const getBiothreatAnalysis = async (threats: BioThreat[]): Promise<Record
         const prompt = `
 You are Aegis, a bio-warfare strategic AI analyst for the Department of Defense.
 Analyze the following list of bio-threat agents. For each threat, provide a single, concise sentence summary as requested.
-Return the output as a single valid JSON object where each key is the exact threat agent name and the value is the generated summary. Ensure the JSON is well-formed and all strings are properly escaped.
+Return the output as a single valid JSON object where each key is the exact threat agent name and the value is the generated summary.
 
 Threats to analyze:
 ${threatsPrompts}
@@ -440,7 +442,7 @@ ${threatsPrompts}
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash', // Use flash for strategic analysis
+                model: 'gemini-2.5-pro', // Use pro for strategic analysis
                 contents: prompt,
                 config: {
                     responseMimeType: "application/json",
@@ -474,7 +476,7 @@ ${labStatuses}`;
     const response = await withRetry<GenerateContentResponse>(() => {
         const ai = getAiClient();
         return ai.models.generateContent({
-            model: 'gemini-2.5-flash',
+            model: 'gemini-2.5-pro',
             contents: prompt,
         });
     });
@@ -529,7 +531,7 @@ ${inventorySummary}
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -563,7 +565,7 @@ You are Aegis, a strategic public health AI advisor. Your task is to create a cl
 2.  Generate a narrative summary that explains the situation and the simulation's outcome in plain language.
 
 **Output Format:**
-Return a single, valid JSON object with the following structure. Ensure the JSON is well-formed and all strings are properly escaped.
+Return a single, valid JSON object with the following structure:
 {
   "projectedCases": [
     // An array of 4 integers representing the projected new weekly cases for Week +1 through Week +4 WITH the intervention.
@@ -581,7 +583,7 @@ Return a single, valid JSON object with the following structure. Ensure the JSON
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
                 config: {
                     responseMimeType: "application/json",
@@ -659,7 +661,7 @@ Generate a Markdown-formatted interpretation of the chart. It must include these
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -690,7 +692,7 @@ Additional Context: ${signal.summary}
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -719,7 +721,7 @@ For a **${alert.status}** signal of **${alert.agent}** detected via **${alert.so
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -734,21 +736,22 @@ For a **${alert.status}** signal of **${alert.agent}** detected via **${alert.so
     }
 };
 
+// FIX: Added missing getChemicalWeaponActionPlan function to generate AI response for chemical threats.
 export const getChemicalWeaponActionPlan = async (alert: ChemicalWeaponSignal): Promise<string> => {
     try {
         const prompt = `
-You are Aegis, a chemical warfare AI response coordinator.
-For a **${alert.status}** signal of **${alert.agent}** detected at **${alert.concentration} ppb** via **${alert.sourceType}** in **${alert.location}**, generate a 3-tier strategic action plan in Markdown format for emergency services.
+You are Aegis, a chemical warfare AI response coordinator (HAZMAT specialist).
+For a **${alert.status}** signal of **${alert.agent}** at **${alert.concentration} ppb** detected via **${alert.sourceType}** in **${alert.location}**, generate a 3-tier strategic action plan in Markdown format for defense and public health officials.
 
 - A main heading: '### Chemical Threat Response Plan: ${alert.agent}'
-- **1. Immediate Public Safety & Evacuation**: Actions for police and fire departments (e.g., define and enforce evacuation zones based on wind models, establish traffic control points, issue emergency alerts via all channels).
-- **2. Medical Triage & Treatment**: Actions for hospitals and paramedics (e.g., prepare and distribute specific antidotes like atropine or pralidoxime, set up mass casualty decontamination corridors, brief ER staff on expected symptoms).
-- **3. Environmental Remediation & Monitoring**: Actions for environmental agencies (e.g., deploy mobile chemical analysis units to monitor plume dissipation, begin planning for long-term soil/water cleanup).
+- **1. Immediate Public Safety & Containment**: Actions for first responders (e.g., establish exclusion zone, issue shelter-in-place or evacuation orders based on agent type and wind direction, deploy HAZMAT teams).
+- **2. Medical Countermeasures & Public Health**: Actions for health officials (e.g., alert hospitals to prepare for specific chemical exposure symptoms, prepare and distribute specific antidotes if available, set up decontamination centers).
+- **3. Environmental & Forensic Response**: Next steps for environmental agencies and investigative bodies (e.g., deploy mobile labs for contamination mapping, secure samples for attribution, model plume dispersal).
 `;
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -777,7 +780,7 @@ For a confirmed **${alert.disease}** alert in **${alert.species}**, generate a 3
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -789,6 +792,40 @@ For a confirmed **${alert.disease}** alert in **${alert.species}**, generate a 3
           throw new Error("The AI service is currently experiencing high traffic. Please try again in a moment.");
         }
         throw new Error("The AI livestock action plan service is currently unavailable.");
+    }
+};
+
+export const getPestCropActionPlan = async (alert: PestInfestationAlert | CropDiseaseAlert): Promise<string> => {
+    const isPest = 'pest' in alert;
+    const alertType = isPest ? 'Pest Infestation' : 'Crop Disease';
+    const name = isPest ? alert.pest : alert.disease;
+    const crop = alert.cropType;
+
+    try {
+        const prompt = `
+You are Aegis, an AI specializing in agricultural biosecurity and food security.
+For a confirmed **${alertType} alert: ${name}** on **${crop}**, generate a 3-tier strategic action plan in Markdown format. The plan must be actionable for government officials and stakeholders.
+
+- A main heading: '### Agricultural Action Plan: ${name} on ${crop}'
+- **1. Immediate Containment & Control**: Detail actions for agriculture departments (e.g., recommend specific, approved pesticides/fungicides, establish crop quarantine zones, deploy pheromone traps for pests, advise on cultural practices like crop residue destruction).
+- **2. Economic & Supply Chain Mitigation**: Provide recommendations to mitigate economic impact (e.g., activate crop insurance protocols, assess potential impact on market prices, advise on alternative sourcing to prevent shortages).
+- **3. Farmer & Public Communication**: Outline clear, simple messages for farmer advisory services and the public (e.g., how to identify the threat, safe application of treatments, where to report sightings, and ensure food safety if applicable).
+`;
+        const response = await withRetry<GenerateContentResponse>(() => {
+            const ai = getAiClient();
+            return ai.models.generateContent({
+                model: 'gemini-2.5-pro',
+                contents: prompt,
+            });
+        });
+
+        return response.text;
+    } catch (error) {
+        console.error(`Error generating pest/crop action plan for ${name}:`, error);
+        if (error instanceof Error && (error.message.includes('429') || error.message.toLowerCase().includes('rate limit'))) {
+          throw new Error("The AI service is currently experiencing high traffic. Please try again in a moment.");
+        }
+        throw new Error("The AI agricultural action plan service is currently unavailable.");
     }
 };
 
@@ -808,7 +845,7 @@ For each of the following biosecurity components, provide two things:
 2. A 'plan': A 3-point list of immediate, actionable "ready-to-go" measures for national security officials, formatted as a Markdown bulleted list under a '### Recommended Actions' heading.
 
 Return a single, valid JSON object. The keys of this object must be the exact component keys ("intel", "labReadiness", "countermeasures", "populationVulnerability").
-The value for each key must be another JSON object with two properties: "summary" (a string) and "plan" (a string). Ensure the final output is a well-formed JSON object with all strings properly escaped.
+The value for each key must be another JSON object with two properties: "summary" (a string) and "plan" (a string).
 
 Components to analyze:
 ${prompts}
@@ -836,7 +873,7 @@ ${prompts}
     const response = await withRetry<GenerateContentResponse>(() => {
       const ai = getAiClient();
       return ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: 'gemini-2.5-pro',
         contents: prompt,
         config: {
           responseMimeType: "application/json",
@@ -886,7 +923,7 @@ For a high-risk slaughterhouse/market alert: **${alert.location}**, generate a 3
         const response = await withRetry<GenerateContentResponse>(() => {
             const ai = getAiClient();
             return ai.models.generateContent({
-                model: 'gemini-2.5-flash',
+                model: 'gemini-2.5-pro',
                 contents: prompt,
             });
         });
@@ -899,4 +936,178 @@ For a high-risk slaughterhouse/market alert: **${alert.location}**, generate a 3
         }
         throw new Error("The AI slaughterhouse action plan service is currently unavailable.");
     }
+};
+
+// FIX: Added missing getPlumeSimulationAnalysis function to generate a tactical response plan for a biological agent release.
+export const getPlumeSimulationAnalysis = async (agent: string, location: string, weather: string): Promise<PlumeSimulationResult> => {
+  try {
+    const prompt = `
+You are Aegis, a bio-hazard dispersal modeling AI (HAZMAT specialist). Your task is to generate a tactical response plan for a confirmed release of a biological agent.
+
+**Simulation Context:**
+- **Agent Released:** ${agent}
+- **Release Location:** ${location}
+- **Current Weather:** ${weather}
+
+**Your Tasks:**
+Generate a tactical response plan for first responders and public health officials.
+
+**Output Format:**
+Return a single, valid JSON object with the following structure:
+{
+  "evacuationOrders": "
+    // A Markdown-formatted summary of immediate evacuation and shelter-in-place orders.
+    // Must include:
+    // ### Evacuation & Public Safety
+    // **Immediate Evacuation Zone:** Define a clear radius or boundary (e.g., '2-mile radius from the release point').
+    // **Shelter-in-Place Zone:** Define a larger downwind boundary.
+    // **Public Guidance:** Provide 2-3 clear, actionable instructions for the public.
+  ",
+  "projectedImpact": "
+    // A Markdown-formatted summary of the projected impact over the next 8 hours.
+    // Must include:
+    // ### Projected 8-Hour Impact
+    // **Primary Plume Trajectory:** Describe the main path of the aerosol cloud based on the wind.
+    // **Population at Risk:** Estimate the number of people in the direct path.
+    // **Critical Infrastructure Affected:** List any major hospitals, schools, or transport hubs in the plume's path.
+  ",
+  "responderGuidance": "
+    // A Markdown-formatted summary of tactical guidance for first responders.
+    // Must include:
+    // ### First Responder Protocol
+    // **Required PPE:** Specify the level of personal protective equipment (e.g., 'Level A HAZMAT suits with SCBA').
+    // **Decontamination:** Recommend primary decontamination procedures.
+    // **Medical Countermeasures:** Suggest immediate prophylactic treatments for exposed personnel.
+  "
+}
+`;
+
+    const response = await withRetry<GenerateContentResponse>(() => {
+      const ai = getAiClient();
+      return ai.models.generateContent({
+        model: 'gemini-2.5-pro',
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              evacuationOrders: {
+                type: Type.STRING,
+                description: "Markdown-formatted evacuation and shelter-in-place orders."
+              },
+              projectedImpact: {
+                type: Type.STRING,
+                description: "Markdown-formatted summary of the projected 8-hour impact."
+              },
+              responderGuidance: {
+                type: Type.STRING,
+                description: "Markdown-formatted tactical guidance for first responders."
+              }
+            },
+            required: ['evacuationOrders', 'projectedImpact', 'responderGuidance']
+          }
+        }
+      });
+    });
+
+    let jsonStr = response.text.trim();
+    if (jsonStr.startsWith('```json')) {
+      jsonStr = jsonStr.substring(7, jsonStr.length - 3).trim();
+    }
+    return JSON.parse(jsonStr);
+
+  } catch (error) {
+    console.error(`Error generating plume simulation for ${agent} at ${location}:`, error);
+    throw new Error("The AI plume simulation service is currently unavailable.");
+  }
+};
+
+export const getGenomicAttribution = async (signal: OdinSignal): Promise<GenomicAttributionResult> => {
+  try {
+    const prompt = `
+You are Project Chimera, a genomic attribution and bio-forensics AI. Your sole purpose is to analyze intelligence signals related to biological threats and determine their likely origin.
+
+**INTELLIGENCE SIGNAL RECEIVED:**
+- **Source:** ${signal.source}
+- **Timestamp:** ${signal.timestamp}
+- **Title:** ${signal.title}
+- **Signal Context:** ${signal.context}
+
+**MISSION:**
+Analyze the signal context to determine the most probable origin of the biological agent described. You must classify the origin as one of three possibilities: 'Natural Origin', 'Accidental Lab Release', or 'Deliberate Weaponization'.
+
+Provide your analysis as a single, valid JSON object with the following strict schema:
+- **attribution**: Your final classification ('Natural Origin', 'Accidental Lab Release', or 'Deliberate Weaponization').
+- **confidence**: Your confidence in this attribution, as an integer from 0 to 100.
+- **geneticMarkers**: An array of strings describing hypothetical genetic markers or evidence that would lead to your conclusion (e.g., "Presence of pBR322 plasmid backbone", "Unusual codon usage for human expression", "Phylogenetic tree consistent with zoonotic jump").
+- **originAnalysis**: A brief, one-paragraph narrative explaining the reasoning for your attribution based on the signal's context.
+- **strategicSummary**: A concise, one-sentence summary for a high-level intelligence briefing, stating the conclusion and its immediate implication.
+`;
+    const response = await withRetry<GenerateContentResponse>(() => {
+      const ai = getAiClient();
+      return ai.models.generateContent({
+        model: 'gemini-2.5-pro',
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.OBJECT,
+            properties: {
+              attribution: { type: Type.STRING, enum: ['Natural Origin', 'Accidental Lab Release', 'Deliberate Weaponization'] },
+              confidence: { type: Type.INTEGER },
+              geneticMarkers: { type: Type.ARRAY, items: { type: Type.STRING } },
+              originAnalysis: { type: Type.STRING },
+              strategicSummary: { type: Type.STRING },
+            },
+            required: ['attribution', 'confidence', 'geneticMarkers', 'originAnalysis', 'strategicSummary']
+          },
+        },
+      });
+    });
+
+    let jsonStr = response.text.trim();
+    if (jsonStr.startsWith('```json')) {
+      jsonStr = jsonStr.substring(7, jsonStr.length - 3).trim();
+    }
+    return JSON.parse(jsonStr);
+
+  } catch (error) {
+    console.error("Error generating genomic attribution:", error);
+    throw new Error("The AI attribution service is currently unavailable.");
+  }
+};
+
+export const getSupplyChainRecommendations = async (analysis: SupplyChainAnalysis): Promise<string> => {
+  try {
+    const prompt = `
+You are Aegis, a national security AI specializing in supply chain resilience and counter-terrorism.
+Analyze the following critical supply chain vulnerability and provide a strategic action plan.
+
+**Supply Chain Category:** ${analysis.category}
+**Vulnerability Context:** ${analysis.aiPromptContext}
+
+**Your Task:**
+Generate a concise, actionable plan in Markdown format with the following structure:
+- A main heading: '### Strategic Recommendations'
+- **1. Diversification & Redundancy**: Specific, actionable steps to reduce reliance on single points of failure.
+- **2. Security Hardening**: Recommendations to protect the identified nodes from physical, cyber, or biological threats.
+- **3. Policy & Stockpiling**: High-level policy suggestions for government action, including strategic stockpiling.
+`;
+    const response = await withRetry<GenerateContentResponse>(() => {
+        const ai = getAiClient();
+        return ai.models.generateContent({
+            model: 'gemini-2.5-pro',
+            contents: prompt,
+        });
+    });
+
+    return response.text;
+  } catch (error) {
+    console.error(`Error generating supply chain recommendations for ${analysis.category}:`, error);
+    if (error instanceof Error && (error.message.includes('429') || error.message.toLowerCase().includes('rate limit'))) {
+      throw new Error("The AI service is currently experiencing high traffic. Please try again in a moment.");
+    }
+    throw new Error("The AI supply chain analysis service is currently unavailable.");
+  }
 };

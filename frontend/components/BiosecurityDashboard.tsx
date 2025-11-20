@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
-
-import NationalBiosecurityIndexPanel from './NationalBiosecurityIndexPanel';
+import {
+  biowarfareThreatsUS,
+  nationalLabNetworkStatusUS,
+  odinSignalsUS,
+  supplyChainDataUS,
+  biowarfareThreatsIndia,
+  nationalLabNetworkStatusIndia,
+  odinSignalsIndia,
+  supplyChainDataIndia,
+} from '../data/constants';
 import BiowarfareThreatMatrix from './BiowarfareThreatMatrix';
 import NationalLabNetwork from './NationalLabNetwork';
-import BiologicalWeaponPanel from './BiologicalWeaponPanel';
-import ChemicalWeaponPanel from './ChemicalWeaponPanel';
-import BiologicalWeaponDetailModal from './BiologicalWeaponDetailModal';
-import ChemicalWeaponDetailModal from './ChemicalWeaponDetailModal';
-
-import { BiologicalWeaponSignal, ChemicalWeaponSignal } from '../types';
+import ThreatSentinelPanel from './odin/ThreatSentinelPanel';
+import GenomicAttributionModal from './odin/GenomicAttributionModal';
+import { OdinSignal } from '../types';
+import DynamicPlumeModel from './odin/DynamicPlumeModel';
+import SupplyChainPanel from './odin/SupplyChainPanel';
 
 interface BiosecurityDashboardProps {
   country: 'US' | 'India';
@@ -17,68 +24,39 @@ interface BiosecurityDashboardProps {
 }
 
 const BiosecurityDashboard: React.FC<BiosecurityDashboardProps> = ({ country, onBack }) => {
-  const [loading, setLoading] = useState(true);
-  const [nationalData, setNationalData] = useState<any>(null);
-  const [threatSignals, setThreatSignals] = useState<any>(null);
+  const [selectedSignal, setSelectedSignal] = useState<OdinSignal | null>(null);
+  const [simulatingSignal, setSimulatingSignal] = useState<OdinSignal | null>(null);
 
-  const [biologicalDetail, setBiologicalDetail] = useState<BiologicalWeaponSignal | null>(null);
-  const [chemicalDetail, setChemicalDetail] = useState<ChemicalWeaponSignal | null>(null);
 
-  const API_BASE = "https://aegis-biosurveillance.onrender.com/api";
+  const data = country === 'US' ? {
+    biowarfareThreats: biowarfareThreatsUS,
+    labNetwork: nationalLabNetworkStatusUS,
+    odinSignals: odinSignalsUS,
+    supplyChain: supplyChainDataUS,
+  } : {
+    biowarfareThreats: biowarfareThreatsIndia,
+    labNetwork: nationalLabNetworkStatusIndia,
+    odinSignals: odinSignalsIndia,
+    supplyChain: supplyChainDataIndia,
+  };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch national data
-        const nationalRes = await fetch(`${API_BASE}/national/${country}`);
-        const nationalJson = await nationalRes.json();
-
-        // Fetch biological + chemical signals
-        const threatRes = await fetch(`${API_BASE}/threat-signals`);
-        const threatJson = await threatRes.json();
-
-        setNationalData(nationalJson);
-        setThreatSignals(threatJson);
-      } catch (err) {
-        console.error("Failed to load biosecurity dashboard:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [country]);
-
-  if (loading || !nationalData || !threatSignals) {
+  if (simulatingSignal) {
     return (
-      <div className="text-white text-xl p-4">
-        Loading Biosecurity Threat Module…
-      </div>
+      <DynamicPlumeModel 
+        signal={simulatingSignal}
+        onClose={() => setSimulatingSignal(null)}
+      />
     );
   }
-
-  // Extract signals for selected country
-  const biologicalSignals = threatSignals.biologicalSignals[country] || [];
-  const chemicalSignals = threatSignals.chemicalSignals[country] || [];
-
-  const biologicalDataSource =
-    country === "US" ? "Source: DHS BioWatch Program" : "Source: DRDO & NTRO Network";
-
-  const chemicalDataSource =
-    country === "US" ? "Source: EPA Sensor Network" : "Source: CPCB & BARC Sensors";
 
   return (
     <>
       <div className="space-y-6 animate-fadeIn">
-
         {/* Header */}
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-white">
-            Bio-Terrorism Threat Module ({country})
+            Project ODIN Command Center ({country})
           </h1>
-
           <button
             onClick={onBack}
             className="bg-brand-light-blue text-white font-semibold py-2 px-4 rounded-md hover:bg-brand-accent transition-colors flex items-center"
@@ -88,56 +66,31 @@ const BiosecurityDashboard: React.FC<BiosecurityDashboardProps> = ({ country, on
           </button>
         </div>
 
-        {/* Top Section: National Biosecurity Index */}
-        <div className="bg-brand-dark-blue/50 p-6 rounded-lg border border-brand-light-blue">
-          <NationalBiosecurityIndexPanel indexData={nationalData.nationalBiosecurityIndexData} />
-        </div>
-
-        {/* Mid Section: Threat Matrix & Labs */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          <div className="lg:col-span-3">
-            <BiowarfareThreatMatrix threats={nationalData.biowarfareThreats} />
-          </div>
-          <div className="lg:col-span-2">
-            <NationalLabNetwork labs={nationalData.nationalLabNetworkStatus} />
-          </div>
-        </div>
-
-        {/* Bottom Section: Real-time Signals */}
-        <div>
-          <h2 className="text-xl font-bold text-white mt-6 mb-4 border-t border-brand-light-blue pt-6">
-            Real-time Environmental Threat Detection
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <BiologicalWeaponPanel
-              alerts={biologicalSignals}
-              onAlertClick={setBiologicalDetail}
-              dataSource={biologicalDataSource}
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Left Column: Intelligence & Readiness */}
+          <div className="space-y-6">
+            <ThreatSentinelPanel 
+              signals={data.odinSignals}
+              onSignalSelect={setSelectedSignal}
+              onInitiateSimulation={setSimulatingSignal}
             />
+            <NationalLabNetwork labs={data.labNetwork} />
+          </div>
 
-            <ChemicalWeaponPanel
-              alerts={chemicalSignals}
-              onAlertClick={setChemicalDetail}
-              dataSource={chemicalDataSource}
-            />
+          {/* Right Column: Strategic Vulnerabilities */}
+          <div className="space-y-6">
+            <BiowarfareThreatMatrix threats={data.biowarfareThreats} />
+            <SupplyChainPanel analysisData={data.supplyChain} />
           </div>
         </div>
 
       </div>
-
-      {/* Modals */}
-      {biologicalDetail && (
-        <BiologicalWeaponDetailModal
-          alert={biologicalDetail}
-          onClose={() => setBiologicalDetail(null)}
-        />
-      )}
-
-      {chemicalDetail && (
-        <ChemicalWeaponDetailModal
-          alert={chemicalDetail}
-          onClose={() => setChemicalDetail(null)}
+      
+      {selectedSignal && (
+        <GenomicAttributionModal
+          signal={selectedSignal}
+          onClose={() => setSelectedSignal(null)}
         />
       )}
     </>
