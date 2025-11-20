@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ activeDashboard, setActiveDashboard, ac
             </div>
             
             <div className="bg-brand-dark p-1 rounded-lg flex space-x-1">
-                {/* <button 
+                <button 
                     onClick={() => setActiveDashboard('US')}
                     className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
                         activeDashboard === 'US' 
@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ activeDashboard, setActiveDashboard, ac
                     }`}
                 >
                     USA
-                </button> */}
+                </button>
                 <button 
                     onClick={() => setActiveDashboard('India')}
                     className={`px-3 py-1 text-sm font-medium rounded-md transition-colors ${
