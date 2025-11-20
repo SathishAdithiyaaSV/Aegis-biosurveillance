@@ -38,7 +38,7 @@ async function resolveAlert(id: string) {
 export type DashboardType = 'US' | 'India';
 
 function App() {
-  const [activeDashboard, setActiveDashboard] = useState<DashboardType>('US');
+  const [activeDashboard, setActiveDashboard] = useState<DashboardType>('India');
   const [activeAlert, setActiveAlert] = useState<EscalatedAlert | null>(null);
 
   // -----------------------------------------
